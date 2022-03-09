@@ -1,39 +1,17 @@
 {
   "name": "stairway-ttm",
-  "version": "1.0.0",
-  "description": "Codebase to strategize the trading in the crypto market using FTX exchange. The code base is written in JS and Python. Base layer in JS. And middleware and algorithms in Python to create support and resistance levels. Sell and buy signals in python. Actual requests in JS. ",
-  "main": "index.js",
+  "version": "0.0.0",
+  "private": true,
   "scripts": {
-    "test": "node index.js"
+    "start": "node ./routes/index.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://gitlab.com/mrishan1993/stairway-ttm.git"
-  },
-  "keywords": [
-    "Crypto",
-    "strategy",
-    "js",
-    "javascript",
-    "python",
-    "resistance",
-    "support",
-    "buy",
-    "sell",
-    "signals",
-    "stairway",
-    "to",
-    "the",
-    "moon",
-    "ftx"
-  ],
-  "author": "Ishan Gupta",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://gitlab.com/mrishan1993/stairway-ttm/issues"
-  },
-  "homepage": "https://gitlab.com/mrishan1993/stairway-ttm#readme",
   "dependencies": {
-    "dotenv": "^16.0.0"
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "express": "~4.16.1",
+    "http-errors": "~1.6.3",
+    "jade": "~1.11.0",
+    "morgan": "~1.9.1",
+    "node-cron": "^3.0.0"
   }
 }
