@@ -378,7 +378,7 @@ def start_process():
         current_price = client.get_single_market(current_market)["price"]
         size = markets[0]["size"]
         print(current_price)
-        if (current_price >= 1.05*buying_price):
+        if (current_price >= 1.10*buying_price):
             print ("market ", markets[0])
             print("size ", size)
             client.place_order(markets[0]["market"], "sell", None, size, "market")
