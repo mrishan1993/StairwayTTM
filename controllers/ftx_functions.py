@@ -1,3 +1,4 @@
+from datetime import datetime
 import time
 import threading
 import pandas as pd
@@ -367,6 +368,8 @@ def start_process():
     client = FtxClient()
     balances = client.get_balances()
     balance = 0
+    now = datetime.now()
+    current_time = now.strftime("%H:%M:%S")
     print("Current Time =", current_time)
     markets = client.get_order_history()
     if (markets[0]["side"] == "buy" and markets[0]["status"] == "closed" and type(markets[0]["avgFillPrice"]) == float and markets[0]["size"] > 0.01):
