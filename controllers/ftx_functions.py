@@ -7,6 +7,7 @@ from levels import *
 from requests import Request, Session, Response
 import hmac
 from ciso8601 import parse_datetime
+import time
 
 
 
@@ -135,7 +136,7 @@ class FtxClient:
             'side': side,
             'price': price,
             'size': size,
-            'type': "limit",
+            'type': "market",
             'reduceOnly': reduce_only,
             'ioc': ioc,
             'postOnly': post_only,
@@ -166,7 +167,7 @@ class FtxClient:
             'triggerPrice': trigger_price,
             'size': size,
             'reduceOnly': reduce_only,
-            'type': 'stop',
+            'type': 'limit',
             'cancelLimitOnTrigger': cancel,
             'orderPrice': limit_price
         })
@@ -360,26 +361,31 @@ class FtxClient:
 
 
 # BTC, ETH, BNB, XRP, LUNA, ADA, SOL, AVAX, DOT, MATIC
+
 def start_process():
-    # threading.Timer(5.0, start_process).start()
+    threading.Timer(5.0, start_process).start()
     client = FtxClient()
     balances = client.get_balances()
     balance = 0
-    print (balances)
-    current_position = client.get_open_orders()
-    if (len(current_positions) > 0):
-        current_market = current_positions[0]["market"]
-        current_buying_price = current_positions[0]["BuyingPrice"]
-        market_info = client.get_market_info(current_market)
-        market_price = market_info["price"]
-        if (market_price > 1.01 * current_buying_price):
-            # sell
-            print("Sell here")
+
+    markets = client.get_order_history()
+    print (">>>>>>>>>>>>>", markets)
+    if (markets[0]["side"] == "buy" and markets[0]["status"] == "closed" and type(markets[0]["avgFillPrice"]) == float and markets[0]["size"] > 0.01):
+        current_market = markets[0]["market"]
+        buying_price = markets[0]["avgFillPrice"]
+        current_price = client.get_single_market(current_market)["price"]
+        size = markets[0]["size"]
+        print(current_price)
+        if (current_price >= 1.05*buying_price):
+            print ("market ", markets[0])
+            print("size ", size)
+            client.place_order(markets[0]["market"], "sell", None, size, "market")
+            print(current_price)
     else:
         for i in balances:
             if i["coin"]=="USD":
                 balance = i["total"]
-        markets = ["ETH/USD", "SOL/USD", "AVAX/USD", "MATIC/USD", "AAVE/USD", "BAT/USD", "LINK/USD", "SUSHI/USD", "UNI/USD", "YFI/USD" ]
+        markets = ["SOL/USD", "AVAX/USD", "MATIC/USD", "AAVE/USD", "BAT/USD", "LINK/USD", "SUSHI/USD", "UNI/USD", "YFI/USD" ]
         for i in markets: 
             print ("markets ", i)
             historical_prices = client.get_historical_prices(i, 3600)
@@ -397,6 +403,7 @@ def start_process():
             print((current_positions))
             if (len(current_positions)) > 0:
                 # Check if needs to exit the position 
+                print("there")
             else:
                 position = getSignal(df)
                 if (position and len(position) > 0 and position["Position"] == "Buy"):
@@ -405,14 +412,17 @@ def start_process():
                     print ("size ", size)
                     print (" StopLoss ", position["StopLoss"])
                     print (" Market ", i)
-                    client.place_conditional_order(i, "buy", size, "stop", position["StopLoss"])
-                    print ("bought")
+                    client.place_order(i, "buy", None, size, "market")
+                    print ("placed")
                     break
+                else:
+                    print("No Buy")
+        
+        
                 
 
 
 
 start_process()
 # client = FtxClient()
-# markets = client.get_markets()
-# print(markets)
+
