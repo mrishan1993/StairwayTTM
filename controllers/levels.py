@@ -51,19 +51,15 @@ def getSignal(price):
   if (last_price-levels[current_level_x][1])>0:
       ###this means it is above the support and we are close to buying
       if levels[current_level_x][1]*(1+distance_from_level)>last_price:
-          print ("Df ----> ", df["Close"])
           last_3_prices=(df['Close'].tail(3))
           last_3_prices = last_3_prices.array
-          print("last 3 prices ", last_3_prices)
           if (last_3_prices[0]>last_3_prices[1] and last_3_prices[1]<last_3_prices[2]) or (last_3_prices[0]<last_3_prices[1] and last_3_prices[1]<last_3_prices[2]):
               buying_price = float(last_price)  ###at what price we bought?
               take_profit = buying_price *(1+take_profit_percent)
               stop_loss= buying_price *(1-stop_loss_percent)
               position = {"Ticker": ticker,"Position": "Buy","BuyingPrice": buying_price,"TakeProfit": take_profit,"StopLoss": stop_loss}  
-              print("Hello --->")
               return position
           else:
-              print("No")
               return {}        
               
               

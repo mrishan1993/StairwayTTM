@@ -367,9 +367,8 @@ def start_process():
     client = FtxClient()
     balances = client.get_balances()
     balance = 0
-
+    print("Current Time =", current_time)
     markets = client.get_order_history()
-    print (">>>>>>>>>>>>>", markets)
     if (markets[0]["side"] == "buy" and markets[0]["status"] == "closed" and type(markets[0]["avgFillPrice"]) == float and markets[0]["size"] > 0.01):
         current_market = markets[0]["market"]
         buying_price = markets[0]["avgFillPrice"]
@@ -380,14 +379,12 @@ def start_process():
             print ("market ", markets[0])
             print("size ", size)
             client.place_order(markets[0]["market"], "sell", None, size, "market")
-            print(current_price)
     else:
         for i in balances:
             if i["coin"]=="USD":
                 balance = i["total"]
         markets = ["SOL/USD", "AVAX/USD", "MATIC/USD", "AAVE/USD", "BAT/USD", "LINK/USD", "SUSHI/USD", "UNI/USD", "YFI/USD" ]
         for i in markets: 
-            print ("markets ", i)
             historical_prices = client.get_historical_prices(i, 3600)
             df = pd.json_normalize(historical_prices)
             dict = {
@@ -400,7 +397,6 @@ def start_process():
             df.rename(columns = dict, inplace=True)
             current_positions = client.get_open_orders()
 
-            print((current_positions))
             if (len(current_positions)) > 0:
                 # Check if needs to exit the position 
                 print("there")
