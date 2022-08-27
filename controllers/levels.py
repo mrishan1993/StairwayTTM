@@ -18,6 +18,8 @@ df = df.loc[:,['Date', 'Open', 'High', 'Low', 'Close']]
 def getSignal(price):
   df = price
   levels = []
+  # for better support ranges 
+  ## --- > getTwoLowerPriceSupport
   for i in range(2,df.shape[0]-2):
     if isSupport(df,i):
       levels.append((i,df['Low'][i]))
@@ -103,5 +105,7 @@ def isFarFromLevel(l, levels, s):
    return np.sum([abs(l-x) < s  for x in levels]) == 0
 
 
-
+def getTwoLowerPriceSupport: 
+  support = df['Low'][i] < df['Low'][i-1]  and df['Low'][i] < df['Low'][i+1] and df['Low'][i+1] < df['Low'][i+2] and df['Low'][i-1] < df['Low'][i-2] and df['Low'][i-1] > df['Low'][i-2]
+  return support 
 

@@ -245,7 +245,7 @@ class FtxClient:
         return results
 
     def get_historical_prices(
-        self, market: str, resolution: int = 300, start_time: float = None,
+        self, market: str, resolution: int = 900, start_time: float = None,
         end_time: float = None
     ) -> List[dict]:
         return self._get(f'markets/{market}/candles', {
@@ -388,7 +388,7 @@ def start_process():
                 balance = i["total"]
         markets = ["SOL/USD", "AVAX/USD", "MATIC/USD", "AAVE/USD", "BAT/USD", "LINK/USD", "SUSHI/USD", "UNI/USD", "YFI/USD" ]
         for i in markets: 
-            historical_prices = client.get_historical_prices(i, 3600)
+            historical_prices = client.get_historical_prices(i, 43200)
             df = pd.json_normalize(historical_prices)
             dict = {
                 "startTime": "Date",
